@@ -10,10 +10,27 @@ import {
   HeartHandshake,
   ArrowRight,
   Activity,
+  X,
 } from "lucide-react";
+
+const dossierSlides = [
+  { src: "/img/cover-dossier.png", title: "Dossier Sicurezza Monumento" },
+  { src: "/img/dossier-obiettivo.png", title: "Obiettivo: data certa di intervento" },
+  { src: "/img/dossier-matrice-rischi.png", title: "Matrice diagnostica dei rischi" },
+  { src: "/img/dossier-cambio-paradigma.png", title: "Cambio di paradigma" },
+  { src: "/img/dossier-collaborazione.png", title: "Collaborazione cittadina" },
+  { src: "/img/dossier-prossimo-passo.png", title: "Il prossimo passo" },
+  { src: "/img/cover-restoration.png", title: "Ripristino urgente" },
+  { src: "/img/restoration-32-bambini.png", title: "32 bambini che aspettano" },
+  { src: "/img/restoration-promessa-realta.png", title: "La promessa vs la realtà" },
+  { src: "/img/restoration-audit.png", title: "Audit del sito: criticità" },
+  { src: "/img/restoration-3-pilastri.png", title: "I 3 pilastri del ripristino" },
+  { src: "/img/restoration-nuovo-modello.png", title: "Nuovo modello: la comunità è pronta" },
+];
 
 export default function Page() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitted">("idle");
+  const [lightbox, setLightbox] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +64,12 @@ export default function Page() {
                 Il Progetto
               </a>
               <a
+                href="#dossier"
+                className="text-slate-600 hover:text-emerald-600 font-medium transition-colors"
+              >
+                Dossier
+              </a>
+              <a
                 href="#partecipa"
                 className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
@@ -59,13 +82,18 @@ export default function Page() {
 
       {/* Hero Section */}
       <section className="relative bg-emerald-900 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center" />
+        <div className="absolute inset-0 opacity-25">
+          <img
+            src="/img/hero-rendering.png"
+            alt="Rendering del parco con altalena e scivolo"
+            className="w-full h-full object-cover"
+          />
         </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/70 to-transparent" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="max-w-3xl">
             <span className="inline-block py-1 px-3 rounded-full bg-emerald-500/30 text-emerald-100 text-sm font-semibold mb-4 border border-emerald-500/50">
-              Iniziativa Cittadina
+              Iniziativa Cittadina · Vellano (Pescia)
             </span>
             <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
               Restituiamo uno spazio sicuro ai 32 bambini di Vellano.
@@ -127,7 +155,7 @@ export default function Page() {
       {/* Il Problema */}
       <section id="il-problema" className="py-20 bg-slate-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
                 Lo stato attuale: un&apos;area inagibile e pericolosa
@@ -146,9 +174,9 @@ export default function Page() {
                       <AlertTriangle className="h-4 w-4 text-rose-600" />
                     </div>
                     <p className="ml-3 text-slate-700">
-                      <strong>Monumento pericolante:</strong> La struttura
-                      centrale in pietra è sgretolata. Colonne e perni in
-                      ferro rischiano di crollare al minimo urto.
+                      <strong>Monumento pericolante:</strong> Colonne in pietra
+                      sgretolate, divelte e abbandonate a terra. Rischio
+                      critico di schiacciamento.
                     </p>
                   </li>
                   <li className="flex items-start">
@@ -156,9 +184,9 @@ export default function Page() {
                       <AlertTriangle className="h-4 w-4 text-rose-600" />
                     </div>
                     <p className="ml-3 text-slate-700">
-                      <strong>Assenza di recinzioni sicure:</strong> Le
-                      staccionate in legno sono marce, divelte o mancanti, non
-                      garantendo il contenimento verso i dislivelli.
+                      <strong>Rischio biologico:</strong> Catene in ferro,
+                      chiodi arrugginiti e ferri sporgenti facilmente
+                      accessibili. Rischio di lacerazioni e tetano.
                     </p>
                   </li>
                   <li className="flex items-start">
@@ -166,51 +194,49 @@ export default function Page() {
                       <AlertTriangle className="h-4 w-4 text-rose-600" />
                     </div>
                     <p className="ml-3 text-slate-700">
-                      <strong>Ostacoli e ferri sporgenti:</strong> Gradoni
-                      sconnessi, erba alta e vecchi ancoraggi arrugginiti
-                      rendono l&apos;area impraticabile.
+                      <strong>Perimetro non protetto:</strong> Staccionate
+                      divelte, gradinate sconnesse e dislivelli senza
+                      protezione. Cadute da altezza.
                     </p>
                   </li>
                 </ul>
               </div>
             </div>
 
-            {/* Galleria fotografica */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="bg-slate-200 rounded-2xl h-48 w-full flex items-center justify-center overflow-hidden shadow-md">
-                  <img
-                    src="https://images.unsplash.com/photo-1518423403565-d7168db74088?auto=format&fit=crop&q=80&w=800"
-                    alt="Monumento pericolante"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="bg-slate-200 rounded-2xl h-64 w-full flex items-center justify-center overflow-hidden shadow-md">
-                  <img
-                    src="https://images.unsplash.com/photo-1584282424071-700d3d526da3?auto=format&fit=crop&q=80&w=800"
-                    alt="Staccionata rotta"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              <div className="space-y-4 pt-8">
-                <div className="bg-slate-200 rounded-2xl h-64 w-full flex items-center justify-center overflow-hidden shadow-md">
-                  <img
-                    src="https://images.unsplash.com/photo-1598286985011-cb9eeb13bc75?auto=format&fit=crop&q=80&w=800"
-                    alt="Erba alta e degrado"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="bg-slate-200 rounded-2xl h-48 w-full flex items-center justify-center overflow-hidden shadow-md">
-                  <img
-                    src="https://images.unsplash.com/photo-1533727503957-75e119430c6a?auto=format&fit=crop&q=80&w=800"
-                    alt="Ferri sporgenti"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+            <div className="space-y-4">
+              <button
+                onClick={() => setLightbox("/img/problema-monumento.png")}
+                className="block w-full rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+              >
+                <img
+                  src="/img/problema-monumento.png"
+                  alt="Reperto A — Rischio schiacciamento e infezione"
+                  className="w-full h-auto"
+                />
+              </button>
+              <button
+                onClick={() => setLightbox("/img/problema-perimetro.png")}
+                className="block w-full rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+              >
+                <img
+                  src="/img/problema-perimetro.png"
+                  alt="Reperto B — Cedimento confini e pericolo caduta"
+                  className="w-full h-auto"
+                />
+              </button>
             </div>
           </div>
+
+          <button
+            onClick={() => setLightbox("/img/restoration-promessa-realta.png")}
+            className="block w-full rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+          >
+            <img
+              src="/img/restoration-promessa-realta.png"
+              alt="La promessa vs la realtà"
+              className="w-full h-auto"
+            />
+          </button>
         </div>
       </section>
 
@@ -228,7 +254,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             <div className="bg-emerald-800/50 border border-emerald-700 p-8 rounded-2xl">
               <div className="bg-emerald-600 w-12 h-12 rounded-xl flex items-center justify-center mb-6">
                 <Activity className="h-6 w-6 text-white" />
@@ -250,8 +276,8 @@ export default function Page() {
               </h3>
               <p className="text-emerald-100/80">
                 Con l&apos;autorizzazione della Sovrintendenza, ricollocazione
-                del monumento (attualmente un duplicato in rovina) nell&apos;area
-                sottostante per liberare lo spazio centrale.
+                del monumento (attualmente un duplicato in rovina)
+                nell&apos;area sottostante per liberare lo spazio centrale.
               </p>
             </div>
 
@@ -281,13 +307,67 @@ export default function Page() {
               </p>
             </div>
           </div>
+
+          <button
+            onClick={() => setLightbox("/img/restoration-3-pilastri.png")}
+            className="block w-full rounded-2xl overflow-hidden shadow-2xl hover:shadow-emerald-500/20 transition-shadow border border-emerald-700"
+          >
+            <img
+              src="/img/restoration-3-pilastri.png"
+              alt="I 3 pilastri del ripristino urgente"
+              className="w-full h-auto"
+            />
+          </button>
+        </div>
+      </section>
+
+      {/* Dossier completo */}
+      <section id="dossier" className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="inline-block py-1 px-3 rounded-full bg-emerald-100 text-emerald-800 text-sm font-semibold mb-4">
+              Documento Ufficiale
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+              Il dossier presentato all&apos;Amministrazione
+            </h2>
+            <p className="text-lg text-slate-600">
+              La documentazione completa che il Comitato Cittadino ha
+              consegnato al Comune di Pescia, ai gruppi consiliari, al
+              Circolo, alla Pro Loco e all&apos;Associazione Parrocchiale.
+              Clicca su ogni scheda per ingrandire.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {dossierSlides.map((slide) => (
+              <button
+                key={slide.src}
+                onClick={() => setLightbox(slide.src)}
+                className="text-left bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition-all"
+              >
+                <div className="aspect-video overflow-hidden bg-slate-100">
+                  <img
+                    src={slide.src}
+                    alt={slide.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="font-semibold text-slate-800 text-sm">
+                    {slide.title}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Call to Action Form */}
-      <section id="partecipa" className="py-20 bg-white">
+      <section id="partecipa" className="py-20 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center">
+          <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
               Unisciti al Comitato Cittadino
             </h2>
@@ -407,6 +487,28 @@ export default function Page() {
           </p>
         </div>
       </footer>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            className="absolute top-6 right-6 text-white hover:text-emerald-400 transition-colors"
+            onClick={() => setLightbox(null)}
+            aria-label="Chiudi"
+          >
+            <X className="h-8 w-8" />
+          </button>
+          <img
+            src={lightbox}
+            alt="Anteprima"
+            className="max-w-full max-h-full rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
