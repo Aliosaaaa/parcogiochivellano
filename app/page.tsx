@@ -29,13 +29,40 @@ const dossierSlides = [
 ];
 
 export default function Page() {
-  const [formStatus, setFormStatus] = useState<"idle" | "submitted">("idle");
+  // URL della Web App Apps Script (Distribuisci -> App web -> URL che finisce con /exec)
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxmRXvRgTWLn4OaNFqR5Cu2DNRT9UcH-8-cAiHkLO4JjAJasQGGF7dpX2gMpw2lYEUX/exec";
+
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "sending" | "submitted" | "error"
+  >("idle");
   const [lightbox, setLightbox] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormStatus("submitted");
-    setTimeout(() => setFormStatus("idle"), 3000);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const params = new URLSearchParams({
+      name: String(data.get("name") || ""),
+      email: String(data.get("email") || ""),
+      lavori: data.get("lavori") ? "true" : "false",
+      eventi: data.get("eventi") ? "true" : "false",
+    });
+
+    setFormStatus("sending");
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString(),
+      });
+      setFormStatus("submitted");
+      form.reset();
+    } catch {
+      setFormStatus("error");
+    }
   };
 
   return (
@@ -108,7 +135,7 @@ export default function Page() {
                 href="#partecipa"
                 className="flex items-center justify-center bg-white text-emerald-900 px-6 py-3 rounded-lg font-bold text-lg hover:bg-slate-100 transition-colors shadow-lg"
               >
-                Firma la petizione <ArrowRight className="ml-2 h-5 w-5" />
+                Aderisci all&apos;iniziativa <ArrowRight className="ml-2 h-5 w-5" />
               </a>
               <a
                 href="#il-progetto"
@@ -404,6 +431,7 @@ export default function Page() {
                   <input
                     type="text"
                     id="name"
+                    name="name"
                     required
                     className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                     placeholder="Es. Mario Rossi"
@@ -419,6 +447,7 @@ export default function Page() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     required
                     className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                     placeholder="mario.rossi@email.com"
@@ -432,15 +461,7 @@ export default function Page() {
                     <label className="flex items-center space-x-3 cursor-pointer">
                       <input
                         type="checkbox"
-                        className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                      />
-                      <span className="text-slate-700">
-                        Voglio solo firmare la petizione al Comune
-                      </span>
-                    </label>
-                    <label className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="checkbox"
+                        name="lavori"
                         className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                       />
                       <span className="text-slate-700">
@@ -450,6 +471,7 @@ export default function Page() {
                     <label className="flex items-center space-x-3 cursor-pointer">
                       <input
                         type="checkbox"
+                        name="eventi"
                         className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                       />
                       <span className="text-slate-700">
@@ -460,10 +482,16 @@ export default function Page() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full mt-6 bg-emerald-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-emerald-700 transition-colors shadow-lg"
+                  disabled={formStatus === "sending"}
+                  className="w-full mt-6 bg-emerald-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-emerald-700 transition-colors shadow-lg disabled:opacity-60"
                 >
-                  Invia Adesione
+                  {formStatus === "sending" ? "Invio in corso…" : "Aderisci all'iniziativa"}
                 </button>
+                {formStatus === "error" && (
+                  <p className="text-sm text-red-600 text-center">
+                    Si è verificato un errore. Riprova o scrivici direttamente.
+                  </p>
+                )}
               </form>
             )}
           </div>
