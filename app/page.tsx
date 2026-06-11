@@ -513,6 +513,22 @@ export default function Page() {
             Obiettivo: Riqualificazione urbana e restituzione spazi sociali.
             Pescia, Toscana.
           </p>
+          <div className="mt-8 pt-6 border-t border-slate-800">
+            <a
+              href="https://aiosha.it"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              <span>Powered by</span>
+              <img
+                src="/img/aiosha-logo.png"
+                alt="AI Osha"
+                className="h-6 w-6 object-contain"
+              />
+              <span className="font-semibold text-white">AI Osha</span>
+            </a>
+          </div>
         </div>
       </footer>
 
